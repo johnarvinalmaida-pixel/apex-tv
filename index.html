@@ -58,16 +58,20 @@ h1{font-size:clamp(34px,5.3vw,76px);line-height:.92;letter-spacing:-.055em;margi
 </main>
 <script>
 const apps=[...document.querySelectorAll('.app')];
-let index=0;
-function focusApp(i){index=(i+apps.length)%apps.length;apps[index].focus();apps.forEach((a,n)=>a.classList.toggle('selected',n===index))}
-apps.forEach((a,i)=>a.addEventListener('focus',()=>{index=i;apps.forEach((x,n)=>x.classList.toggle('selected',n===i))}));
 document.addEventListener('keydown',e=>{
- if(['ArrowRight','ArrowLeft','ArrowUp','ArrowDown'].includes(e.key)){
-   e.preventDefault();
-   if(e.key==='ArrowRight')focusApp(index+1);
-   if(e.key==='ArrowLeft')focusApp(index-1);
-   if(e.key==='ArrowDown'||e.key==='ArrowUp')focusApp(index);
+ const k=e.key;
+ const c=e.keyCode||e.which;
+ const right=k==='ArrowRight'||k==='Right'||c===39;
+ const left=k==='ArrowLeft'||k==='Left'||c===37;
+ const down=k==='ArrowDown'||k==='Down'||c===40;
+ const up=k==='ArrowUp'||k==='Up'||c===38;
+ if(right||left||down||up){
+  e.preventDefault();
+  if(right)focusApp(index+1);
+  if(left)focusApp(index-1);
+  if(down||up)focusApp(index);
  }
+});
 });
 function tick(){const d=new Date();document.getElementById('clock').textContent=d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})+'  •  '+d.toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'});}
 tick();setInterval(tick,30000);
